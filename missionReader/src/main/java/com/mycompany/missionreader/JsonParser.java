@@ -20,26 +20,16 @@ public class JsonParser implements MissionParser {
     
     private SorcererRegister sorcererRegister;
     private CurseRegister curseRegister;
+    private MissionStorage missionStorage;
     
-    public JsonParser(SorcererRegister sorcererRegister, CurseRegister curseRegister) {
+    public JsonParser(SorcererRegister sorcererRegister, CurseRegister curseRegister, MissionStorage missionStorage) {
         this.sorcererRegister = sorcererRegister;
         this.curseRegister = curseRegister;
-    }
-    
-    @Override
-    public boolean canParse(File file) {
-        String name = file.getName();
-        String extension = name.substring(name.lastIndexOf(".") + 1);
-        return extension.equalsIgnoreCase("json");
+        this.missionStorage = missionStorage;
     }
     
     @Override
     public Mission parse(File file) {
-        
-        if (!canParse(file)) {
-            System.out.println("Расширение файла неверное");
-            return null;
-        }
         
         try {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -49,7 +39,7 @@ public class JsonParser implements MissionParser {
         String missionId = jsonNode.get("missionId").asText();
         String rawDate = jsonNode.get("date").asText();
         LocalDate date = LocalDate.parse(rawDate); 
-        String location = jsonNode.get("location").asText(); 
+        String location = jsonNode.get("location").asText();
         String outcome = jsonNode.get("outcome").asText();
         int damageCost = jsonNode.get("damageCost").asInt();
         
@@ -83,16 +73,13 @@ public class JsonParser implements MissionParser {
             techniques.add(technique);  
         } 
         
-        String comment;
-         if (jsonNode.has("comment")) {
-            comment = jsonNode.get("comment").asText();
-        } else {
-            comment = null;
-        }
-
-        return new Mission(missionId, date, location, curse, outcome, damageCost, sorcerers, techniques, comment);
+            String comment = jsonNode.has("comment") ? jsonNode.get("comment").asText() : null;
+            
+        Mission mission = new Mission(missionId, date, location, curse, outcome, damageCost, sorcerers, techniques, comment);
+        return mission;
+                               
         } catch (IOException e) {
-            System.out.println("Невалидный файл"); 
+            System.out.println("Ошибка при парсинге JSON файла: " + e.getMessage());
             return null;
         }
     }

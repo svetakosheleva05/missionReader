@@ -17,12 +17,14 @@ import java.util.Map;
  * @author svetl
  */
 public class TxtParser implements MissionParser {  
-    private final SorcererRegister sorcererRegister;
-    private final CurseRegister curseRegister;
+    private SorcererRegister sorcererRegister;
+    private CurseRegister curseRegister;
+    private MissionStorage missionStorage;
     
-    public TxtParser(SorcererRegister sorcererRegister, CurseRegister curseRegister) {
+    public TxtParser(SorcererRegister sorcererRegister, CurseRegister curseRegister, MissionStorage missionStorage) {
         this.sorcererRegister = sorcererRegister;
         this.curseRegister = curseRegister;
+        this.missionStorage = missionStorage;
     }
     
     @Override
@@ -44,9 +46,8 @@ public class TxtParser implements MissionParser {
             List<Sorcerer> sorcerers = parseSorcerers(data);
             List<Technique> techniques = parseTechniques(data, sorcerers);
             String note = data.get("note");
-            
-            return new Mission(missionId, date, location, curse, outcome, damageCost, sorcerers, techniques, note);
-            
+            Mission mission = new Mission(missionId, date, location, curse, outcome, damageCost, sorcerers, techniques, note);;
+            return mission;
         } catch (Exception e) {
             System.err.println("Ошибка при парсинге TXT: " + e.getMessage());
             return null;

@@ -18,19 +18,21 @@ import java.util.List;
  */
 public class XmlParser implements MissionParser {
     
-    private final XmlMapper xmlMapper;
-    private final SorcererRegister sorcererRegister;
-    private final CurseRegister curseRegister;
+    private SorcererRegister sorcererRegister;
+    private CurseRegister curseRegister;
+    private MissionStorage missionStorage;
     
-    public XmlParser(SorcererRegister sorcererRegister, CurseRegister curseRegister) {
-        this.xmlMapper = new XmlMapper();
+    
+    public XmlParser(SorcererRegister sorcererRegister, CurseRegister curseRegister, MissionStorage missionStorage) {
         this.sorcererRegister = sorcererRegister;
         this.curseRegister = curseRegister;
+        this.missionStorage = missionStorage;
     }
     
     @Override
     public Mission parse(File file) {
         try {
+            XmlMapper xmlMapper = new XmlMapper();
             JsonNode root = xmlMapper.readTree(file);
             
             String missionId = root.get("missionId").asText();
