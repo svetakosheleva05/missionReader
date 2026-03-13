@@ -28,7 +28,7 @@ public class Manager {
         System.out.println("Начинаем работу");
         while (true) {
             System.out.print("Введите путь к файлу (или 'выход' для выхода): ");
-            String path = scanner.nextLine().trim();
+            String path = scanner.nextLine().trim().replace("\"", "");
             if (path.trim().equalsIgnoreCase("выход") || path.trim().equalsIgnoreCase("exit")) {
                 System.out.println("Работа закончена");
                 break;
