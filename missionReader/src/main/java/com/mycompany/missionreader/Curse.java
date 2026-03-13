@@ -4,6 +4,8 @@
  */
 package com.mycompany.missionreader;
 
+import java.util.Objects;
+
 /**
  *
  * @author svetl
@@ -35,6 +37,41 @@ public class Curse {
     
     @Override
     public String toString() {
-        return "Проклятие: " + name + " Грейд: " + grade; 
+        return name + " Грейд: " + grade; 
+    }
+    
+        @Override
+    public boolean equals(Object obj) {
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Curse curse2 = (Curse) obj;
+        
+        if (name == null) {
+            if (curse2.name != null) {
+                return false;
+            }
+        } else if (!name.equals(curse2.name)) {
+            return false;
+        }
+        
+        if (grade == null) {
+            if (curse2.grade != null) {
+                return false;
+            }
+        } else if (!grade.equals(curse2.grade)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.name);
+        hash = 71 * hash + Objects.hashCode(this.grade);
+        return hash;
     }
 }

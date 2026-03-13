@@ -11,13 +11,14 @@ package com.mycompany.missionreader;
 public class Technique {
     private String name;
     private String type;
-    private String damage;
+    private int damage;
     private Sorcerer owner;
 
-    public Technique(String name, String type, String damage) {
+    public Technique(String name, String type, int damage, Sorcerer owner) {
         this.name = name;
         this.type = type;
         this.damage = damage;
+        this.owner = owner;
     }
 
     public String getName() {
@@ -28,7 +29,7 @@ public class Technique {
         return type;
     }
 
-    public String getDamage() {
+    public int getDamage() {
         return damage;
     }
 
@@ -44,7 +45,7 @@ public class Technique {
         this.type = type;
     }
 
-    public void setDamage(String damage) {
+    public void setDamage(int damage) {
         this.damage = damage;
     }
 

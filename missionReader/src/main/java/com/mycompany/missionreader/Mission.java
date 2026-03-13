@@ -22,12 +22,13 @@ public class Mission {
     private List<Technique> techniqueUsed;
     private String note;
 
-    public Mission(String missionCode, LocalDate date, String location, Curse targetCurse, String result, List participants, List techniqueUsed, String note) {
+    public Mission(String missionCode, LocalDate date, String location, Curse targetCurse, String result, int damageCost, List participants, List techniqueUsed, String note) {
         this.missionId = missionCode;
         this.date = date;
         this.location = location;
         this.targetCurse = targetCurse;
         this.result = result;
+        this.damageCost = damageCost;
         this.participants = participants;
         this.techniqueUsed = techniqueUsed;
         this.note = note;
@@ -101,29 +102,31 @@ public class Mission {
         this.techniqueUsed = techniqueUsed;
     }
 
-    public void setSummary(String note) {
+    public void setNote(String note) {
         this.note = note;
     }
     
     public void printReport() {
         System.out.println("   *** Информация о миссии " + missionId + " ***   ");
         System.out.println();
-        System.out.println("Дата и локация: " + date + " " + location);
+        System.out.println("ДАТА И ЛОКАЦИЯ: " + date + " " + location);
         System.out.println("-----------------------------------------------");
-        System.out.println("Результат: " + result);
+        System.out.println("РЕЗУЛЬТАТ: " + result);
         System.out.println("-----------------------------------------------");
-        System.out.println(targetCurse.toString());
+        System.out.println("ПРОКЛЯТИЕ " + targetCurse.toString());
         System.out.println("-----------------------------------------------");
-        System.out.println("Участники: ");
+        System.out.println("УЧАСТНИКИ: ");
         for (Sorcerer sorcerer : participants) {
             System.out.println(sorcerer.toString());
         }
         System.out.println("-----------------------------------------------");
-        System.out.println("Примененные техники: ");
+        System.out.println("ПРИМЕНЁННЫЕ ТЕХНИКИ: ");
         for (Technique technique : techniqueUsed)
             System.out.println(technique.toString());
         System.out.println("-----------------------------------------------");
-        System.out.println("Комментарии: ");
+        if (note != null) {
+        System.out.println("КОММЕНТАРИИ: " + note);
+        }
         System.out.println("================================================");
     }
 }
