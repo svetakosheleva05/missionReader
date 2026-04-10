@@ -40,7 +40,7 @@ public class Curse {
         return name + " Грейд: " + grade; 
     }
     
-        @Override
+    @Override
     public boolean equals(Object obj) {
         
         if (getClass() != obj.getClass()) {

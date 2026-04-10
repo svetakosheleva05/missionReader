@@ -2,9 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.missionreader;
+package com.mycompany.missionreader.parsers;
 
+import com.mycompany.missionreader.Curse;
+import com.mycompany.missionreader.CurseRegister;
+import com.mycompany.missionreader.Mission;
+import com.mycompany.missionreader.MissionBuilder;
+import com.mycompany.missionreader.MissionStorage;
+import com.mycompany.missionreader.Sorcerer;
+import com.mycompany.missionreader.SorcererRegister;
+import com.mycompany.missionreader.Technique;
+import com.mycompany.missionreader.enams.MissionOutcome;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -20,11 +31,13 @@ public class TxtParser implements MissionParser {
     private SorcererRegister sorcererRegister;
     private CurseRegister curseRegister;
     private MissionStorage missionStorage;
+    private MissionBuilder builder;
     
-    public TxtParser(SorcererRegister sorcererRegister, CurseRegister curseRegister, MissionStorage missionStorage) {
+    public TxtParser(SorcererRegister sorcererRegister, CurseRegister curseRegister, MissionStorage missionStorage, MissionBuilder builder) {
         this.sorcererRegister = sorcererRegister;
         this.curseRegister = curseRegister;
         this.missionStorage = missionStorage;
+        this.builder = builder;
     }
     
     @Override
@@ -32,22 +45,25 @@ public class TxtParser implements MissionParser {
         try {
 
             Map<String, String> data = readFileToMap(file);
-            String missionId = data.get("missionId");
-            LocalDate date = LocalDate.parse(data.get("date"));
-            String location = data.get("location");
-            String outcome = data.get("outcome");
-            int damageCost = Integer.parseInt(data.get("damageCost"));
+            builder.setMissionId(data.get("missionId"));
+            builder.setDate(LocalDate.parse(data.get("date")));
+            builder.setLocation(data.get("location"));
+            builder.setOutcome(MissionOutcome.fromStringToEnum(data.get("outcome")));
+            builder.setDamageCost(Integer.parseInt(data.get("damageCost")));
             
             Curse curse = curseRegister.getOrCreate(new Curse(
                 data.get("curse.name"),
                 data.get("curse.threatLevel")
             ));
+            builder.setTargetCurse(curse);
             
             List<Sorcerer> sorcerers = parseSorcerers(data);
+            builder.setParticipants(sorcerers);
+            
             List<Technique> techniques = parseTechniques(data, sorcerers);
-            String note = data.get("note");
-            Mission mission = new Mission(missionId, date, location, curse, outcome, damageCost, sorcerers, techniques, note);;
-            return mission;
+            builder.setTechniqueUsed(techniques);
+            
+            return builder.build();
         } catch (Exception e) {
             System.err.println("Ошибка при парсинге TXT: " + e.getMessage());
             return null;
@@ -116,11 +132,30 @@ public class TxtParser implements MissionParser {
             }
             
             int damage = Integer.parseInt(damageStr);
-            Sorcerer owner = sorcererRegister.findSorcererByName(ownerName);
+            String owner = ownerName;
             result.add(new Technique(name, type, damage, owner));
             index++;
         }
         
         return result;
+    }
+
+    @Override
+    public boolean canParse(File file) {
+        if (!getType(file).equalsIgnoreCase("TXT")) {
+            return false;
+        }
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String firstLine = reader.readLine();
+            if (firstLine == null) {
+                return false;
+            }
+            
+            return firstLine.trim().startsWith("missionId:");
+            
+        } catch (IOException e) {
+            return false;
+        }
     }
 }

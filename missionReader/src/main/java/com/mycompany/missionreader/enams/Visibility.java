@@ -16,7 +16,7 @@ public enum Visibility {
     NONE,
     UNKNOWN;
     
-    public static Visibility fromString(String value) {
+    public static Visibility fromStringToEnum(String value) {
         if (value == null || value.isBlank()) {
             return UNKNOWN;
         }

@@ -12,13 +12,13 @@ public class Technique {
     private String name;
     private String type;
     private int damage;
-    private Sorcerer owner;
+    private String ownerName;
 
-    public Technique(String name, String type, int damage, Sorcerer owner) {
+    public Technique(String name, String type, int damage, String ownerName) {
         this.name = name;
         this.type = type;
         this.damage = damage;
-        this.owner = owner;
+        this.ownerName = ownerName;
     }
 
     public String getName() {
@@ -33,8 +33,8 @@ public class Technique {
         return damage;
     }
 
-    public Sorcerer getOwner() {
-        return owner;
+    public String getOwnerName() {
+        return ownerName;
     }
 
     public void setName(String name) {
@@ -49,12 +49,12 @@ public class Technique {
         this.damage = damage;
     }
 
-    public void setOwner(Sorcerer owner) {
-        this.owner = owner;
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
     
     @Override
     public String toString() {
-        return "Техника: " + name + "\nТип техники: " + type + "\nУрон техники: " + damage + "\nМаг, применивший технику: " + owner; 
+        return "Техника: " + name + "\nТип техники: " + type + "\nУрон техники: " + damage + "\nМаг, применивший технику: " + ownerName; 
     }
 }

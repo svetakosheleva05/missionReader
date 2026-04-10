@@ -12,7 +12,7 @@ import java.util.List;
  * @author svetl
  */
 public class CurseRegister {
-    public List<Curse> curses = new ArrayList<>();
+    private List<Curse> curses = new ArrayList<>();
     
         public Curse getOrCreate(Curse curse) {
         int index = curses.indexOf(curse);

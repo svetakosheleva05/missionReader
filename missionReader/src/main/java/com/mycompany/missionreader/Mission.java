@@ -4,7 +4,10 @@
  */
 package com.mycompany.missionreader;
 
+import com.mycompany.missionreader.enams.MissionOutcome;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -15,23 +18,23 @@ public class Mission {
     private String missionId;
     private LocalDate date;
     private String location;
-    private String result;
+    private MissionOutcome outcome;
     private int damageCost;
     private Curse targetCurse;
     private List<Sorcerer> participants;
     private List<Technique> techniqueUsed;
-    private String note;
-
-    public Mission(String missionCode, LocalDate date, String location, Curse targetCurse, String result, int damageCost, List participants, List techniqueUsed, String note) {
-        this.missionId = missionCode;
+    private EconomicAssessment economicAssessment;
+    private CivilianImpact civilianImpact;
+    private EnemyActivity enemyActivity;
+    private EnvironmentConditions environmentConditions;
+    private List<OperationTimeline> operationTimelines;
+    private HashMap<String, ArrayList<String>> otherData;
+    
+    public Mission(String missionId, LocalDate date, String location, MissionOutcome outcome) {
+        this.missionId = missionId;
         this.date = date;
         this.location = location;
-        this.targetCurse = targetCurse;
-        this.result = result;
-        this.damageCost = damageCost;
-        this.participants = participants;
-        this.techniqueUsed = techniqueUsed;
-        this.note = note;
+        this.outcome = outcome;
     }
 
     public String getMissionId() {
@@ -46,32 +49,52 @@ public class Mission {
         return location;
     }
 
-    public String getResult() {
-        return result;
+    public MissionOutcome getOutcome() {
+        return outcome;
     }
 
     public int getDamageCost() {
         return damageCost;
     }
-    
+
     public Curse getTargetCurse() {
         return targetCurse;
     }
 
-    public List getParticipants() {
+    public List<Sorcerer> getParticipants() {
         return participants;
     }
 
-    public List getTechniqueUsed() {
+    public List<Technique> getTechniqueUsed() {
         return techniqueUsed;
     }
 
-    public String getNote() {
-        return note;
+    public EconomicAssessment getEconomicAssessment() {
+        return economicAssessment;
     }
 
-    public void setMissionId(String missionCode) {
-        this.missionId = missionCode;
+    public CivilianImpact getCivilianImpact() {
+        return civilianImpact;
+    }
+
+    public EnemyActivity getEnemyActivity() {
+        return enemyActivity;
+    }
+
+    public EnvironmentConditions getEnvironmentConditions() {
+        return environmentConditions;
+    }
+
+    public List<OperationTimeline> getOperationTimelinesS() {
+        return operationTimelines;
+    }
+
+    public HashMap<String, ArrayList<String>> getOtherData() {
+        return otherData;
+    }
+
+    public void setMissionId(String missionId) {
+        this.missionId = missionId;
     }
 
     public void setDate(LocalDate date) {
@@ -81,52 +104,48 @@ public class Mission {
     public void setLocation(String location) {
         this.location = location;
     }
-    
-    public void setResult(String result) {
-        this.result = result;
+
+    public void setOutcome(MissionOutcome outcome) {
+        this.outcome = outcome;
     }
 
     public void setDamageCost(int damageCost) {
         this.damageCost = damageCost;
     }
-    
+
     public void setTargetCurse(Curse targetCurse) {
         this.targetCurse = targetCurse;
     }
 
-    public void setParticipants(List participants) {
+    public void setParticipants(List<Sorcerer> participants) {
         this.participants = participants;
     }
 
-    public void setTechniqueUsed(List techniqueUsed) {
+    public void setTechniqueUsed(List<Technique> techniqueUsed) {
         this.techniqueUsed = techniqueUsed;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setEconomicAssessment(EconomicAssessment economicAssessment) {
+        this.economicAssessment = economicAssessment;
     }
-    
-    public void printReport() {
-        System.out.println("   *** Информация о миссии " + missionId + " ***   ");
-        System.out.println();
-        System.out.println("ДАТА И ЛОКАЦИЯ: " + date + " " + location);
-        System.out.println("-----------------------------------------------");
-        System.out.println("РЕЗУЛЬТАТ: " + result);
-        System.out.println("-----------------------------------------------");
-        System.out.println("ПРОКЛЯТИЕ " + targetCurse.toString());
-        System.out.println("-----------------------------------------------");
-        System.out.println("УЧАСТНИКИ: ");
-        for (Sorcerer sorcerer : participants) {
-            System.out.println(sorcerer.toString());
-        }
-        System.out.println("-----------------------------------------------");
-        System.out.println("ПРИМЕНЁННЫЕ ТЕХНИКИ: ");
-        for (Technique technique : techniqueUsed)
-            System.out.println(technique.toString());
-        System.out.println("-----------------------------------------------");
-        if (note != null) {
-        System.out.println("КОММЕНТАРИИ: " + note);
-        }
-        System.out.println("================================================");
+
+    public void setCivilianImpact(CivilianImpact civilianImpact) {
+        this.civilianImpact = civilianImpact;
+    }
+
+    public void setEnemyActivity(EnemyActivity enemyActivity) {
+        this.enemyActivity = enemyActivity;
+    }
+
+    public void setEnvironmentConditions(EnvironmentConditions environmentConditions) {
+        this.environmentConditions = environmentConditions;
+    }
+
+    public void setOperationTimelines(List<OperationTimeline> operationTimelines) {
+        this.operationTimelines = operationTimelines;
+    }
+
+    public void setOtherData(HashMap<String, ArrayList<String>> otherData) {
+        this.otherData = otherData;
     }
 }

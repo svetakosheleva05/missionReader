@@ -14,7 +14,7 @@ public enum CurseThreatLevel {
     SPECIAL_GRADE,
     UNKNOWN;
     
-    public static CurseThreatLevel fromStringToEnam(String value) { 
+    public static CurseThreatLevel fromStringToEnum(String value) { 
         if (value == null || value.isBlank()) {
             return UNKNOWN;
         }

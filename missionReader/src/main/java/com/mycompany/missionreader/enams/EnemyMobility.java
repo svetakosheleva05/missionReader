@@ -16,7 +16,7 @@ public enum EnemyMobility {
     EXTREME,
     UNKNOWN;
     
-    public static EnemyMobility fromString(String value) {
+    public static EnemyMobility fromStringToEnum(String value) {
         if (value == null || value.isBlank()) {
             return UNKNOWN;
         }

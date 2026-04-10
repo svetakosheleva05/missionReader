@@ -12,7 +12,7 @@ import java.util.List;
  * @author svetl
  */
 public class SorcererRegister {
-    public List<Sorcerer> sorcerers = new ArrayList<>();
+    private List<Sorcerer> sorcerers = new ArrayList<>();
     
     public Sorcerer getOrCreate(Sorcerer sorcerer) {
         int index = sorcerers.indexOf(sorcerer);

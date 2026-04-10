@@ -31,4 +31,11 @@ public class MissionStorage {
         missions.add(mission);
         }
     }
+    
+    public void printAll() {
+        System.out.println("Список миссий");
+        for (Mission mission : missions) {
+            System.out.println(mission.getMissionId());
+        }
+    }
 }

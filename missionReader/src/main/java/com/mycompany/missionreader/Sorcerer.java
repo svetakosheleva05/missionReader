@@ -19,6 +19,9 @@ public class Sorcerer {
         this.rank = rank;
     }
     
+    public Sorcerer(String name) {
+        this.name = name;
+    }
     public Sorcerer() {
         this.name = "Unknown sorcerer";
         this.rank = "Unknown sorcerer";
