@@ -4,8 +4,10 @@
  */
 package com.mycompany.missionreader.parsers;
 
+import com.mycompany.missionreader.CivilianImpact;
 import com.mycompany.missionreader.Curse;
 import com.mycompany.missionreader.CurseRegister;
+import com.mycompany.missionreader.EnemyActivity;
 import com.mycompany.missionreader.EnvironmentConditions;
 import com.mycompany.missionreader.Mission;
 import com.mycompany.missionreader.MissionBuilder;
@@ -13,7 +15,10 @@ import com.mycompany.missionreader.MissionStorage;
 import com.mycompany.missionreader.Sorcerer;
 import com.mycompany.missionreader.SorcererRegister;
 import com.mycompany.missionreader.Technique;
+import com.mycompany.missionreader.enams.EnemyMobility;
+import com.mycompany.missionreader.enams.EscalationRisk;
 import com.mycompany.missionreader.enams.MissionOutcome;
+import com.mycompany.missionreader.enams.PublicExposureRisk;
 import com.mycompany.missionreader.enams.Visibility;
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,6 +41,11 @@ public class TxtParser2 implements MissionParser {
     private CurseRegister curseRegister;
     private MissionStorage missionStorage;
     
+    private List<String> evacuationZones = new ArrayList<>();
+    private List<String> attackPatterns = new ArrayList<>();
+    private List<String> statusEffects = new ArrayList<>();
+    private List<String> notes = new ArrayList<>();
+    
     public TxtParser2(SorcererRegister sorcererRegister, CurseRegister curseRegister, MissionStorage missionStorage, MissionBuilder builder) {
         this.sorcererRegister = sorcererRegister;
         this.curseRegister = curseRegister;
@@ -45,7 +55,11 @@ public class TxtParser2 implements MissionParser {
 
     @Override
     public Mission parse(File file) {
-
+        evacuationZones.clear();
+        attackPatterns.clear();
+        statusEffects.clear();
+        notes.clear();
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             String currentSection = null;
@@ -53,6 +67,8 @@ public class TxtParser2 implements MissionParser {
             Map<String, String> missionData = new HashMap<>();
             Map<String, String> curseData = new HashMap<>();
             Map<String, String> environmentData = new HashMap<>();
+            Map<String, String> civilianImpactData = new HashMap<>();
+            Map<String, String> enemyActivityData = new HashMap<>();
 
             Map<String, String> currentSorcerer = null;
             Map<String, String> currentTechnique = null;
@@ -106,6 +122,24 @@ public class TxtParser2 implements MissionParser {
                             break;
                         case "ENVIRONMENT":
                             environmentData.put(key, value);
+                            break;
+                        case "CIVILIAN_IMPACT":
+                            civilianImpactData.put(key, value);
+                            break;
+                        case "EVACUATION_ZONE":
+                            evacuationZones.add(value);
+                            break;
+                        case "ENEMY_ACTIVITY":
+                            enemyActivityData.put(key, value);
+                            break;
+                        case "ATTACK_PATTERN":
+                            attackPatterns.add(value);
+                            break;
+                        case "STATUS_EFFECT":
+                            statusEffects.add(value);
+                            break;
+                        case "NOTES":
+                            notes.add(value);
                             break;
                     }
                 }
@@ -170,7 +204,48 @@ public class TxtParser2 implements MissionParser {
                     techniques.add(technique);
                 }
             }
-            builder.setTechniqueUsed(techniques);
+            if (!techniques.isEmpty()) {
+                builder.setTechniqueUsed(techniques);
+            }
+
+            if (!civilianImpactData.isEmpty()) {
+                CivilianImpact civilianImpact = new CivilianImpact();
+                
+                if (civilianImpactData.containsKey("evacuated")) {
+                    civilianImpact.setEvacuated(Integer.parseInt(civilianImpactData.get("evacuated")));
+                }
+                if (civilianImpactData.containsKey("injured")) {
+                    civilianImpact.setInjured(Integer.parseInt(civilianImpactData.get("injured")));
+                }
+                if (civilianImpactData.containsKey("missing")) {
+                    civilianImpact.setMissing(Integer.parseInt(civilianImpactData.get("missing")));
+                }
+                if (civilianImpactData.containsKey("publicExposureRisk")) {
+                    civilianImpact.setPublicExposureRisk(
+                        PublicExposureRisk.fromStringToEnum(civilianImpactData.get("publicExposureRisk"))
+                    );
+                }
+                builder.setCivilianImpact(civilianImpact);
+            }
+
+            if (!enemyActivityData.isEmpty() || !attackPatterns.isEmpty()) {
+                EnemyActivity enemyActivity = new EnemyActivity();
+                
+                if (enemyActivityData.containsKey("behaviorType")) {
+                    enemyActivity.setBehaviorType(enemyActivityData.get("behaviorType"));
+                }
+                if (enemyActivityData.containsKey("mobility")) {
+                    enemyActivity.setMobility(EnemyMobility.fromStringToEnum(enemyActivityData.get("mobility")));
+                }
+                if (enemyActivityData.containsKey("escalationRisk")) {
+                    enemyActivity.setEscalationRisk(EscalationRisk.fromStringToEnum(enemyActivityData.get("escalationRisk")));
+                }
+                if (!attackPatterns.isEmpty()) {
+                    enemyActivity.setAttackPatterns(new ArrayList<>(attackPatterns));
+                }
+                
+                builder.setEnemyActivity(enemyActivity);
+            }
 
             if (!environmentData.isEmpty()) {
                 EnvironmentConditions conditions = new EnvironmentConditions();
@@ -189,6 +264,22 @@ public class TxtParser2 implements MissionParser {
                 }
 
                 builder.setEnvironmentConditions(conditions);
+            }
+
+            java.util.HashMap<String, java.util.ArrayList<String>> otherData = new java.util.HashMap<>();
+            
+            if (!evacuationZones.isEmpty()) {
+                otherData.put("evacuationZones", new java.util.ArrayList<>(evacuationZones));
+            }
+            if (!statusEffects.isEmpty()) {
+                otherData.put("statusEffects", new java.util.ArrayList<>(statusEffects));
+            }
+            if (!notes.isEmpty()) {
+                otherData.put("notes", new java.util.ArrayList<>(notes));
+            }
+            
+            if (!otherData.isEmpty()) {
+                builder.setOtherData(otherData);
             }
 
             return builder.build();
