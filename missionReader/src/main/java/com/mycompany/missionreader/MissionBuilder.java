@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author svetl
  */
-public class MissionBuilder implements Builder {
+public class MissionBuilder{
     private String missionId;
     private LocalDate date;
     private String location;
@@ -34,7 +34,6 @@ public class MissionBuilder implements Builder {
         reset();
     }
     
-    @Override
     public void reset() {
         this.missionId = null;
         this.date = null;
@@ -52,109 +51,74 @@ public class MissionBuilder implements Builder {
         this.otherData = new HashMap<>();
     }
     
-    @Override
-    public Builder setMissionId(String missionId) {
+    public void setMissionId(String missionId) {
         this.missionId = missionId;
-        return this;
     }
     
-    @Override
-    public Builder setDate(LocalDate date) {
+    public void setDate(LocalDate date) {
         this.date = date;
-        return this;
     }
     
-    @Override
-    public Builder setLocation(String location) {
+    public void setLocation(String location) {
         this.location = location;
-        return this;
     }
     
-    @Override
-    public Builder setOutcome(MissionOutcome outcome) {
+    public void setOutcome(MissionOutcome outcome) {
         this.outcome = outcome;
-        return this;
     }
     
-    @Override
-    public Builder setDamageCost(int damageCost) {
+    public void setDamageCost(int damageCost) {
         this.damageCost = damageCost;
-        return this;
     }
     
-    @Override
-    public Builder setTargetCurse(Curse curse) {
+    public void setTargetCurse(Curse curse) {
         this.targetCurse = curse;
-        return this;
     }
     
-    @Override
-    public Builder setParticipants(List<Sorcerer> participants) {
+    public void setParticipants(List<Sorcerer> participants) {
         this.participants = new ArrayList<>(participants);
-        return this;
     }
     
-    @Override
-    public Builder addParticipant(Sorcerer sorcerer) {
+    public void addParticipant(Sorcerer sorcerer) {
         this.participants.add(sorcerer);
-        return this;
     }
-    
-    @Override
-    public Builder setTechniqueUsed(List<Technique> techniques) {
+
+    public void setTechniqueUsed(List<Technique> techniques) {
         this.techniqueUsed = new ArrayList<>(techniques);
-        return this;
     }
     
-    @Override
-    public Builder addTechnique(Technique technique) {
+    public void addTechnique(Technique technique) {
         this.techniqueUsed.add(technique);
-        return this;
     }
     
-    @Override
-    public Builder setEconomicAssessment(EconomicAssessment assessment) {
+    public void setEconomicAssessment(EconomicAssessment assessment) {
         this.economicAssessment = assessment;
-        return this;
     }
     
-    @Override
-    public Builder setCivilianImpact(CivilianImpact impact) {
+    public void setCivilianImpact(CivilianImpact impact) {
         this.civilianImpact = impact;
-        return this;
     }
     
-    @Override
-    public Builder setEnemyActivity(EnemyActivity activity) {
+    public void setEnemyActivity(EnemyActivity activity) {
         this.enemyActivity = activity;
-        return this;
     }
     
-    @Override
-    public Builder setEnvironmentConditions(EnvironmentConditions conditions) {
+    public void setEnvironmentConditions(EnvironmentConditions conditions) {
         this.environmentConditions = conditions;
-        return this;
     }
     
-    @Override
-    public Builder setOperationTimelines(List<OperationTimeline> timeline) {
+    public void setOperationTimelines(List<OperationTimeline> timeline) {
         this.operationTimelines = timeline;
-        return this;
     }
     
-    @Override
-    public Builder setOtherData(HashMap<String, ArrayList<String>> otherData) {
+    public void setOtherData(HashMap<String, ArrayList<String>> otherData) {
         this.otherData = new HashMap<>(otherData);
-        return this;
     }
     
-    @Override
-    public Builder addOtherData(String key, ArrayList<String> values) {
+    public void addOtherData(String key, ArrayList<String> values) {
         this.otherData.put(key, values);
-        return this;
     }
     
-    @Override
     public Mission build() {
         Mission mission = new Mission(missionId, date, location, outcome);
         

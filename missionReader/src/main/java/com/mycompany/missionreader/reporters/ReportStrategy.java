@@ -4,20 +4,12 @@
  */
 package com.mycompany.missionreader.reporters;
 
+import com.mycompany.missionreader.Mission;
+
 /**
  *
  * @author svetl
  */
-
-public enum ReportSection {
-    BASIC_INFO,
-    DAMAGE_COST,
-    TARGET_CURSE,
-    PARTICIPANTS,
-    TECHNIQUES,
-    ECONOMIC,
-    CIVILIAN,
-    ENEMY_ACTIVITY,
-    ENVIRONMENT,
-    TIMELINE
+public interface ReportStrategy {
+    Report fillReport(Mission mission);
 }
